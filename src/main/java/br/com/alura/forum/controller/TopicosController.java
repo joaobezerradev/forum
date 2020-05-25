@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import br.com.alura.forum.dto.DetalhesTopicoDto;
 import br.com.alura.forum.dto.TopicoDto;
 import br.com.alura.forum.dto.TopicoForm;
 import br.com.alura.forum.repository.CursoRepository;
@@ -39,6 +41,13 @@ public class TopicosController {
 			return ResponseEntity.ok(topicoDto);
 		}
 
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<DetalhesTopicoDto> show(@PathVariable Long id) {
+		var topico = topicoRepository.findById(id).orElseThrow();
+		var detalheTopicoDto = new DetalhesTopicoDto(topico);
+		return ResponseEntity.ok(detalheTopicoDto);
 	}
 
 	@PostMapping

@@ -7,9 +7,9 @@ import org.hibernate.validator.constraints.Length;
 
 import br.com.alura.forum.model.Topico;
 import br.com.alura.forum.repository.CursoRepository;
-import lombok.Data;
+import lombok.Getter;
 
-@Data
+@Getter
 public class TopicoForm {
 	@NotNull
 	@NotBlank
