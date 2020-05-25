@@ -14,8 +14,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
 @Entity
 public class Topico {
 	@Id
@@ -32,4 +34,11 @@ public class Topico {
 	private Curso curso;
 	@OneToMany(mappedBy = "topico")
 	private List<Resposta> respostas = new ArrayList<>();
+
+	public Topico(String titulo, String mensagem, Curso curso) {
+		this.titulo = titulo;
+		this.mensagem = mensagem;
+		this.curso = curso;
+
+	}
 }
