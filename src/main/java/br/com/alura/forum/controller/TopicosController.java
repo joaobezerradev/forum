@@ -2,6 +2,8 @@ package br.com.alura.forum.controller;
 
 import static org.springframework.data.domain.Sort.Direction.ASC;
 
+import java.io.Serializable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -31,8 +33,12 @@ import br.com.alura.forum.repository.TopicoRepository;
 
 @RestController
 @RequestMapping("/topicos")
-public class TopicosController {
+public class TopicosController implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	@Autowired
 	TopicoRepository topicoRepository;
 	@Autowired
@@ -92,6 +98,7 @@ public class TopicosController {
 	@DeleteMapping("/{id}")
 	@CacheEvict(value = "listaDeTopicos", allEntries = true)
 	public ResponseEntity<Void> delete(@PathVariable final Long id) {
+
 		final var topico = topicoRepository.findById(id);
 
 		if (topico.isEmpty()) {
