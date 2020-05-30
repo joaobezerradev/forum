@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import br.com.alura.forum.model.Usuario;
 import br.com.alura.forum.repository.UsuarioRepository;
 
 @Service
@@ -16,10 +15,9 @@ public class AutenticacaoService implements UserDetailsService {
 	private UsuarioRepository repository;
 
 	@Override
-	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-		Usuario usuario = repository.findByEmail(username)
-				.orElseThrow(() -> new UsernameNotFoundException("Usuario não existe"));
-		return usuario;
+	public UserDetails loadUserByUsername(String username) {
+
+		return repository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException("Usuario não existe"));
 	}
 
 }
