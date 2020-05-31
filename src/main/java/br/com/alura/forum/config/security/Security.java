@@ -11,6 +11,9 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import br.com.alura.forum.repository.UsuarioRepository;
 
 @EnableWebSecurity
 @Configuration
@@ -18,7 +21,11 @@ public class Security extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private AutenticacaoService service;
-	
+	@Autowired
+	private TokenService tokenService;
+	@Autowired
+	private UsuarioRepository usuarioRepository;
+
 	@Override
 	@Bean
 	public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -34,9 +41,11 @@ public class Security extends WebSecurityConfigurerAdapter {
 	// Autorização
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/topicos").permitAll().antMatchers(HttpMethod.POST,"/auth").permitAll()
-				.antMatchers(HttpMethod.GET, "/topicos/*").permitAll().anyRequest().authenticated().and().csrf()
-				.disable().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/topicos").permitAll()
+				.antMatchers(HttpMethod.POST, "/auth").permitAll().antMatchers(HttpMethod.GET, "/topicos/*").permitAll()
+				.anyRequest().authenticated().and().csrf().disable().sessionManagement()
+				.sessionCreationPolicy(SessionCreationPolicy.STATELESS).and().addFilterBefore(
+						new JwtValidation(tokenService, usuarioRepository), UsernamePasswordAuthenticationFilter.class);
 	}
 
 	/*
